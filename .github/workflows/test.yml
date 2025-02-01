@@ -21,12 +21,7 @@ jobs:
     runs-on: ubuntu-latest
 
     # Steps represent a sequence of tasks that will be executed as part of the job
-    steps:
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version-file: "pyproject.toml"
-          cache: 'poetry'        
+    steps:    
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - name: Check-out repository
         uses: actions/checkout@v4
@@ -43,9 +38,17 @@ jobs:
       # Install poetry
       - name: Install poetry
         run: pipx install poetry
+      # Install python
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version-file: "project/pyproject.toml"
+          cache: 'poetry'    
       # Install packages
       - name: Install packages
         run: poetry install
+        working-directory: ./project
       # pytest
       - name: Run Pytest
-        run: poetry run pytest        
+        run: poetry run pytest
+        working-directory: ./project

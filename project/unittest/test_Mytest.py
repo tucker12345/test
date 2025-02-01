@@ -10,7 +10,7 @@ def spark():
     return spark
 
 def test_Mytest(spark):
-    n = Mytest.Mytest_method(spark)
+    n = Mytest.Mytest.Mytest_method(spark)
     assert n == 2
     
     
