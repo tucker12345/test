@@ -25,7 +25,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version-file: "pyproject.toml"
+          python-version-file: "project/pyproject.toml"
           cache: 'poetry'        
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - name: Check-out repository
