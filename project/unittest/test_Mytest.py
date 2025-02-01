@@ -5,7 +5,7 @@ from project.Mytest import Mytest
 @pytest.fixture(scope="session")
 def spark():
     spark = (
-        SparkSession.builder.appName("PyDeequTest").getOrCreate()
+        SparkSession.builder.appName("test").getOrCreate()
     )
     return spark
 
