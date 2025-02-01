@@ -50,4 +50,5 @@ jobs:
         working-directory: ./project
       # pytest
       - name: Run Pytest
-        run: poetry run pytest        
+        run: poetry run pytest
+        working-directory: ./project
