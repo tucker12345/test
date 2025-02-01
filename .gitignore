@@ -1,0 +1,7 @@
+*.coverage
+*.pyc
+.vscode/
+*.TAG
+project/project/__pycache__/__init__.cpython-313.pyc
+project/project/__pycache__/Mytest.cpython-313.pyc
+.pytest_cache/CACHEDIR.TAG
