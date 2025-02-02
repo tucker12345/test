@@ -53,9 +53,9 @@ jobs:
         run: poetry run pytest --cov --cov-report term-missing -n auto
         working-directory: ./project/unittest
       # Ruff  
-      - name: Format
-        run:  poetry run ruff format .
-        working-directory: ./project/unittest
       - name: Lint
         run:  poetry run ruff check --output-format=github .
-        working-directory: ./project/unittest        
+        working-directory: ./project        
+      - name: Format
+        run:  poetry run ruff format .
+        working-directory: ./project        
