@@ -55,5 +55,7 @@ jobs:
       # Ruff  
       - name: Format
         run:  poetry run ruff format .
+        working-directory: ./project/unittest
       - name: Lint
-        run:  poetry run ruff check --output-format=github .        
+        run:  poetry run ruff check --output-format=github .
+        working-directory: ./project/unittest        
