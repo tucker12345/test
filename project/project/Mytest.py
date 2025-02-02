@@ -9,5 +9,5 @@ class Mytest():
         df = _spark.createDataFrame([(1, 'Alice'), (2, 'Bob')], ['id', 'name'])
         return len(df.schema.fields)
     
-    
-    
+# df = spark.createDataFrame([(1, 'Alice'), (2, 'Bob')], ['id', 'name'])    
+# df.printSchema()    
