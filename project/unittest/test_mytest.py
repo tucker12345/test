@@ -12,6 +12,9 @@ def spark():
 def test_mytest(spark):
     n = Mytest.Mytest_method(spark)
     assert n == 2
+
+    n = Mytest.Mytest_method2(spark)
+    assert n == 2
     
 # if __name__ == "__main__":
 #     pytest.main([__file__])    
