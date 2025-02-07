@@ -20,7 +20,6 @@ def spark() -> SparkSession:
     """
     return SparkSession.builder.appName("test").getOrCreate()
 
-
 def test_mytest(spark: SparkSession) -> None:
     """Define test case.
 
