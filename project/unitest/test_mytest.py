@@ -54,7 +54,7 @@ def test_bronze(spark: SparkSession) -> None:
 
     2 cases.
     """
-    bonze_df = ETL.bonze(spark, schema, data)
+    bonze_df = ETL.bronze(spark, schema, data)
     assert bonze_df.count() == 9
     
 def test_silver(spark: SparkSession) -> None:
@@ -62,7 +62,7 @@ def test_silver(spark: SparkSession) -> None:
 
     2 cases.
     """
-    bonze_df = ETL.bonze(spark, schema, data)
+    bonze_df = ETL.bronze(spark, schema, data)
     silver_df = ETL.silver(bonze_df)
     assert silver_df.sum("order_amount") == 250.75 + 150.00 + 500.00 + 100*1.3 + 800.10 + 700.00 + 200.00*1.3
     
@@ -71,7 +71,7 @@ def test_gold(spark: SparkSession) -> None:
 
     2 cases.
     """    
-    bonze_df = ETL.bonze(spark, schema, data)
+    bonze_df = ETL.bronze(spark, schema, data)
     silver_df = ETL.silver(bonze_df)
     gold_df = ETL.gold(silver_df)
     assert gold_df.count() == 4
