@@ -7,6 +7,7 @@ This module provides:
 
 from pyspark.sql import SparkSession
 from pyspark.sql.types import StructType, StructField, IntegerType, StringType, FloatType
+from pyspark.sql import functions as F
 import pytest
 
 from project.my_module import ETL
@@ -54,7 +55,7 @@ def test_bronze(spark: SparkSession) -> None:
 
     2 cases.
     """
-    bonze_df = ETL.bonze(spark, schema, data)
+    bonze_df = ETL.bronze(spark, schema, data)
     assert bonze_df.count() == 9
     
 def test_silver(spark: SparkSession) -> None:
@@ -62,17 +63,19 @@ def test_silver(spark: SparkSession) -> None:
 
     2 cases.
     """
-    bonze_df = ETL.bonze(spark, schema, data)
+    bonze_df = ETL.bronze(spark, schema, data)
     silver_df = ETL.silver(bonze_df)
-    assert silver_df.sum("order_amount") == 250.75 + 150.00 + 500.00 + 100*1.3 + 800.10 + 700.00 + 200.00*1.3
+    total_order_amount = silver_df.agg(F.sum("order_amount")).collect()[0][0]
+    assert round(total_order_amount,2) == 250.75 + 150.00 + 500.00 + 100*1.3 + 800.10 + 700.00 + 200.00*1.3
     
 def test_gold(spark: SparkSession) -> None:
     """Define test case.
 
     2 cases.
     """    
-    bonze_df = ETL.bonze(spark, schema, data)
+    bonze_df = ETL.bronze(spark, schema, data)
     silver_df = ETL.silver(bonze_df)
     gold_df = ETL.gold(silver_df)
     assert gold_df.count() == 4
-    assert gold_df.sum("sum(order_amount)") == 250.75 + 150.00 + 500.00 + 100*1.3 + 800.10 + 700.00 + 200.00*1.3
+    total_order_amount = gold_df.agg(F.sum("sum(order_amount)")).collect()[0][0]
+    assert round(total_order_amount,2) == 250.75 + 150.00 + 500.00 + 100*1.3 + 800.10 + 700.00 + 200.00*1.3
