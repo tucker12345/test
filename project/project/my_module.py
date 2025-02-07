@@ -5,8 +5,8 @@ This module provides:
 - calculate dataframe count.
 """
 
-from pyspark.sql import SparkSession
 from pyspark.sql import DataFrame
+from pyspark.sql import SparkSession
 
 spark = SparkSession.builder.appName("MyApp").getOrCreate()
 

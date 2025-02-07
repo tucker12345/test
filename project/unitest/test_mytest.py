@@ -6,7 +6,6 @@ This module provides:
 """
 
 from pyspark.sql import SparkSession
-from pyspark.sql import DataFrame
 import pytest
 
 from project.my_module import MyTest
@@ -25,9 +24,8 @@ def test_mytest(spark: SparkSession) -> None:
 
     2 cases.
     """
-    
     the_df = spark.createDataFrame([(1, "Alice"), (2, "Bob")], ["id", "name"])
-    
+
     n = MyTest.mytest_method(the_df)
     assert n == 2
     n = MyTest.mytest_method2(the_df)
