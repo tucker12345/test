@@ -1,4 +1,1 @@
-"""test classes iitialize.
-
--- do nothing.
-"""
+"""Initializes the project package."""
