@@ -1,4 +1,5 @@
 [
   "project/test/test_Mytest.py::test_Mytest",
+  "project/unitest/test_mytest.py::test_mytest",
   "project/unittest/test_mytest.py::test_mytest"
 ]

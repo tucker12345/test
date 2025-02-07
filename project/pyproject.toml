@@ -28,11 +28,19 @@ exclude = []
 
 [tool.ruff.lint]
 select = ["ALL"]
-ignore = []
+ignore = [
+    "S101", #Use of assert
+    "PLR2004", #Use of constant variable
+    "D203", #incorrect-blank-line-before-class
+    "D213", #multi-line-summary-first-line
+    "COM812", #missing-trailing-comma
+]
 fixable = ["ALL"]
 
 [tool.ruff.lint.isort]
 force-single-line = true
+order-by-type = true
+force-sort-within-sections = true
 
 [tool.ruff.lint.mccabe]
 max-complexity = 5
