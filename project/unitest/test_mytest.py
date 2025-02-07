@@ -6,10 +6,30 @@ This module provides:
 """
 
 from pyspark.sql import SparkSession
+from pyspark.sql.types import StructType, StructField, IntegerType, StringType, FloatType
 import pytest
 
-from project.my_module import MyTest
+from project.my_module import ETL
 
+schema = StructType([
+    StructField("order_id", IntegerType(), True),
+    StructField("customer_id", IntegerType(), True),
+    StructField("order_date", StringType(), True),
+    StructField("order_amount", FloatType(), True),  
+    StructField("status", StringType(), True)
+])
+
+data = [
+    (1, 1001, "2025-02-01", 250.75, "completed"),
+    (2, None, "2025-02-02", 320.50, "pending"),
+    (3, 1001, "2025-02-03", 150.00, "completed"),
+    (4, 1003, "2025-02-04",  0.00, "canceled"),
+    (5, 1002, "2025-02-05", None, "completed"),  
+    (6, 1004, "2025-02-06", 500.00, "completed"),
+    (7, 1003, "2025-02-07", 100.00, "pending"),
+    (8, 1004, "2025-02-08", 800.10, "completed"),
+    (9, 1002, "2025-02-09", 700.00, "completed"),
+    (10, 1001, "2025-02-10", 200.00, "pending")]
 
 @pytest.fixture(scope="session")
 def spark() -> SparkSession:
@@ -17,16 +37,42 @@ def spark() -> SparkSession:
 
     returns spark.
     """
-    return SparkSession.builder.appName("test").getOrCreate()
+    return SparkSession.builder.appName("ETL").getOrCreate()
 
-def test_mytest(spark: SparkSession) -> None:
+def test_field_count(spark: SparkSession) -> None:
     """Define test case.
 
     2 cases.
     """
-    the_df = spark.createDataFrame([(1, "Alice"), (2, "Bob")], ["id", "name"])
+    input_df = spark.createDataFrame(data, schema)
 
-    n = MyTest.mytest_method(the_df)
-    assert n == 2
-    n = MyTest.mytest_method2(the_df)
-    assert n == 2
+    n = len(input_df.schema.fields)
+    assert n == 5
+
+def test_bronze(spark: SparkSession) -> None:
+    """Define test case.
+
+    2 cases.
+    """
+    bonze_df = ETL.bonze(spark, schema, data)
+    assert bonze_df.count() == 9
+    
+def test_silver(spark: SparkSession) -> None:
+    """Define test case.
+
+    2 cases.
+    """
+    bonze_df = ETL.bonze(spark, schema, data)
+    silver_df = ETL.silver(bonze_df)
+    assert silver_df.sum("order_amount") == 250.75 + 150.00 + 500.00 + 100*1.3 + 800.10 + 700.00 + 200.00*1.3
+    
+def test_gold(spark: SparkSession) -> None:
+    """Define test case.
+
+    2 cases.
+    """    
+    bonze_df = ETL.bonze(spark, schema, data)
+    silver_df = ETL.silver(bonze_df)
+    gold_df = ETL.gold(silver_df)
+    assert gold_df.count() == 4
+    assert gold_df.sum("sum(order_amount)") == 250.75 + 150.00 + 500.00 + 100*1.3 + 800.10 + 700.00 + 200.00*1.3
