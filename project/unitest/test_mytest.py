@@ -30,5 +30,5 @@ def test_mytest(spark: SparkSession) -> None:
     
     n = MyTest.mytest_method(the_df)
     assert n == 2
-    n = MyTest.mytest_method2(spark)
+    n = MyTest.mytest_method2(the_df)
     assert n == 2
