@@ -1,6 +1,5 @@
 ```markdown
 # ETL Module
-
 The provided code defines a Python module that includes an ETL (Extract, Transform, Load) class designed to process data through different stages: bronze, silver, and gold. The module begins by importing necessary components from the `pyspark.sql` package, including `DataFrame`, `SparkSession`, `StructType`, and functions like `when` and `col`. It then initializes a Spark session named "MyApp".
 
 The `ETL` class contains three class methods: `bronze`, `silver`, and `gold`. Each method represents a different stage in the ETL process.
@@ -15,8 +14,6 @@ Overall, the `ETL` class provides a structured way to process and transform data
 
 ## Directory Structure
 
-```
-
 ├── project/
 │   ├── project/
 │   │   ├── __init__.py
@@ -25,8 +22,8 @@ Overall, the `ETL` class provides a structured way to process and transform data
 │   │   ├── __init__.py
 │   │   ├── test_my_module.py
 ├── README.md
-```
-```
+
+## Directory Tree 
 
 ├── project/
 │   ├── project/
@@ -39,7 +36,7 @@ Overall, the `ETL` class provides a structured way to process and transform data
 
 ## Unit Test Case 
 
-"""Test suite for the ETL process using PySpark and pytest.
+Test suite for the ETL process using PySpark and pytest.
 
 This test suite includes the following tests:
 1. test_field_count: Verifies that the input DataFrame has the expected number of fields.
