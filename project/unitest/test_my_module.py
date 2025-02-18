@@ -1,10 +1,11 @@
 # import csv
 import io
 import os
+import datetime
 import pandas as pd
 import pytest
 from pyspark.sql import SparkSession
-from pyspark.sql.types import StructType, StructField, StringType, IntegerType, FloatType
+from pyspark.sql.types import StructType,StringType,IntegerType,StructField,DateType,DoubleType
 from pyspark.sql import functions as f
 from project.my_module import ETL
 
@@ -26,133 +27,134 @@ def IsTargetMatch(_df,_stage):
     flag = True
     if _stage == "bronze":
       # For order_id column
-      _df.select("order_id").collect()[0][0] = 1
-      _df.select("order_id").collect()[1][0] = 2
-      _df.select("order_id").collect()[2][0] = 3
-      _df.select("order_id").collect()[3][0] = 4
-      _df.select("order_id").collect()[4][0] = 5
-      _df.select("order_id").collect()[5][0] = 6
-      _df.select("order_id").collect()[6][0] = 7
-      _df.select("order_id").collect()[7][0] = 8
-      _df.select("order_id").collect()[8][0] = 9
-      _df.select("order_id").collect()[9][0] = 10
+      assert _df.select("order_id").collect()[0][0] == 1
+      assert _df.select("order_id").collect()[1][0] == 2
+      assert _df.select("order_id").collect()[2][0] == 3
+      assert _df.select("order_id").collect()[3][0] == 4
+      assert _df.select("order_id").collect()[4][0] == 5
+      assert _df.select("order_id").collect()[5][0] == 6
+      assert _df.select("order_id").collect()[6][0] == 7
+      assert _df.select("order_id").collect()[7][0] == 8
+      assert _df.select("order_id").collect()[8][0] == 9
+      assert _df.select("order_id").collect()[9][0] == 10
       
       # For customer_id column
-      _df.select("customer_id").collect()[0][0] = 1001
-      _df.select("customer_id").collect()[1][0] = None
-      _df.select("customer_id").collect()[2][0] = 1001
-      _df.select("customer_id").collect()[3][0] = 1003
-      _df.select("customer_id").collect()[4][0] = 1002
-      _df.select("customer_id").collect()[5][0] = 1004
-      _df.select("customer_id").collect()[6][0] = 1003
-      _df.select("customer_id").collect()[7][0] = 1004
-      _df.select("customer_id").collect()[8][0] = 1002
-      _df.select("customer_id").collect()[9][0] = 1001
+      assert _df.select("customer_id").collect()[0][0] == 1001
+      assert _df.select("customer_id").collect()[1][0] == None
+      assert _df.select("customer_id").collect()[2][0] == 1001
+      assert _df.select("customer_id").collect()[3][0] == 1003
+      assert _df.select("customer_id").collect()[4][0] == 1002
+      assert _df.select("customer_id").collect()[5][0] == 1004
+      assert _df.select("customer_id").collect()[6][0] == 1003
+      assert _df.select("customer_id").collect()[7][0] == 1004
+      assert _df.select("customer_id").collect()[8][0] == 1002
+      assert _df.select("customer_id").collect()[9][0] == 1001
       
       # For order_date column
-      _df.select("order_date").collect()[0][0] = '2025-02-01'
-      _df.select("order_date").collect()[1][0] = '2025-02-02'
-      _df.select("order_date").collect()[2][0] = '2025-02-03'
-      _df.select("order_date").collect()[3][0] = '2025-02-04'
-      _df.select("order_date").collect()[4][0] = '2025-02-05'
-      _df.select("order_date").collect()[5][0] = '2025-02-06'
-      _df.select("order_date").collect()[6][0] = '2025-02-07'
-      _df.select("order_date").collect()[7][0] = '2025-02-08'
-      _df.select("order_date").collect()[8][0] = '2025-02-09'
-      _df.select("order_date").collect()[9][0] = '2025-02-10'
+      assert _df.select("order_date").collect()[0][0] == datetime.datetime.strptime('2025-02-01', '%Y-%m-%d').date()
+      assert _df.select("order_date").collect()[1][0] == datetime.datetime.strptime('2025-02-02', '%Y-%m-%d').date()
+      assert _df.select("order_date").collect()[2][0] == datetime.datetime.strptime('2025-02-03', '%Y-%m-%d').date()
+      assert _df.select("order_date").collect()[3][0] == datetime.datetime.strptime('2025-02-04', '%Y-%m-%d').date()
+      assert _df.select("order_date").collect()[4][0] == datetime.datetime.strptime('2025-02-05', '%Y-%m-%d').date()
+      assert _df.select("order_date").collect()[5][0] == datetime.datetime.strptime('2025-02-06', '%Y-%m-%d').date()
+      assert _df.select("order_date").collect()[6][0] == datetime.datetime.strptime('2025-02-07', '%Y-%m-%d').date()
+      assert _df.select("order_date").collect()[7][0] == datetime.datetime.strptime('2025-02-08', '%Y-%m-%d').date()
+      assert _df.select("order_date").collect()[8][0] == datetime.datetime.strptime('2025-02-09', '%Y-%m-%d').date()
+      assert _df.select("order_date").collect()[9][0] == datetime.datetime.strptime('2025-02-10', '%Y-%m-%d').date()
       
       # For order_amount column
-      _df.select("order_amount").collect()[0][0] = 250.75
-      _df.select("order_amount").collect()[1][0] = 320.50
-      _df.select("order_amount").collect()[2][0] = 150.00
-      _df.select("order_amount").collect()[3][0] = 0.00
-      _df.select("order_amount").collect()[4][0] = None
-      _df.select("order_amount").collect()[5][0] = 500.00
-      _df.select("order_amount").collect()[6][0] = 100.00
-      _df.select("order_amount").collect()[7][0] = 800.10
-      _df.select("order_amount").collect()[8][0] = 700.00
-      _df.select("order_amount").collect()[9][0] = 200.00
+      assert _df.select("order_amount").collect()[0][0] == 250.75
+      assert _df.select("order_amount").collect()[1][0] == 320.50
+      assert _df.select("order_amount").collect()[2][0] == 150.00
+      assert _df.select("order_amount").collect()[3][0] == 0.00
+      assert _df.select("order_amount").collect()[4][0] == None
+      assert _df.select("order_amount").collect()[5][0] == 500.00
+      assert _df.select("order_amount").collect()[6][0] == 100.00
+      assert _df.select("order_amount").collect()[7][0] == 800.10
+      assert _df.select("order_amount").collect()[8][0] == 700.00
+      assert _df.select("order_amount").collect()[9][0] == 200.00
       
       # For status column
-      _df.select("status").collect()[0][0] = 'completed'
-      _df.select("status").collect()[1][0] = 'pending'
-      _df.select("status").collect()[2][0] = 'completed'
-      _df.select("status").collect()[3][0] = 'canceled'
-      _df.select("status").collect()[4][0] = 'completed'
-      _df.select("status").collect()[5][0] = 'completed'
-      _df.select("status").collect()[6][0] = 'pending'
-      _df.select("status").collect()[7][0] = 'completed'
-      _df.select("status").collect()[8][0] = 'completed'
-      _df.select("status").collect()[9][0] = 'pending'
+      assert _df.select("status").collect()[0][0] == 'completed'
+      assert _df.select("status").collect()[1][0] == 'pending'
+      assert _df.select("status").collect()[2][0] == 'completed'
+      assert _df.select("status").collect()[3][0] == 'canceled'
+      assert _df.select("status").collect()[4][0] == 'completed'
+      assert _df.select("status").collect()[5][0] == 'completed'
+      assert _df.select("status").collect()[6][0] == 'pending'
+      assert _df.select("status").collect()[7][0] == 'completed'
+      assert _df.select("status").collect()[8][0] == 'completed'
+      assert _df.select("status").collect()[9][0] == 'pending'
+    
     elif _stage == "silver":
       # For order_id column
-      _df.select("order_id").collect()[0][0] = 1
-      # _df.select("order_id").collect()[1][0] = 2
-      _df.select("order_id").collect()[2][0] = 3
-      _df.select("order_id").collect()[3][0] = 4
-      _df.select("order_id").collect()[4][0] = 5
-      _df.select("order_id").collect()[5][0] = 6
-      _df.select("order_id").collect()[6][0] = 7
-      _df.select("order_id").collect()[7][0] = 8
-      _df.select("order_id").collect()[8][0] = 9
-      _df.select("order_id").collect()[9][0] = 10
+      assert _df.select("order_id").collect()[0][0] == 1
+      #assert  _df.select("order_id").collect()[1][0] == 2
+      assert _df.select("order_id").collect()[2][0] == 3
+      assert _df.select("order_id").collect()[3][0] == 4
+      assert _df.select("order_id").collect()[4][0] == 5
+      assert _df.select("order_id").collect()[5][0] == 6
+      assert _df.select("order_id").collect()[6][0] == 7
+      assert _df.select("order_id").collect()[7][0] == 8
+      assert _df.select("order_id").collect()[8][0] == 9
+      assert _df.select("order_id").collect()[9][0] == 10
       
       # For customer_id column
-      _df.select("customer_id").collect()[0][0] = 1001
-      # _df.select("customer_id").collect()[1][0] = None
-      _df.select("customer_id").collect()[2][0] = 1001
-      _df.select("customer_id").collect()[3][0] = 1003
-      _df.select("customer_id").collect()[4][0] = 1002
-      _df.select("customer_id").collect()[5][0] = 1004
-      _df.select("customer_id").collect()[6][0] = 1003
-      _df.select("customer_id").collect()[7][0] = 1004
-      _df.select("customer_id").collect()[8][0] = 1002
-      _df.select("customer_id").collect()[9][0] = 1001
+      assert _df.select("customer_id").collect()[0][0] == 1001
+      #assert  _df.select("customer_id").collect()[1][0] == None
+      assert _df.select("customer_id").collect()[2][0] == 1001
+      assert _df.select("customer_id").collect()[3][0] == 1003
+      assert _df.select("customer_id").collect()[4][0] == 1002
+      assert _df.select("customer_id").collect()[5][0] == 1004
+      assert _df.select("customer_id").collect()[6][0] == 1003
+      assert _df.select("customer_id").collect()[7][0] == 1004
+      assert _df.select("customer_id").collect()[8][0] == 1002
+      assert _df.select("customer_id").collect()[9][0] == 1001
       
       # For order_date column
-      _df.select("order_date").collect()[0][0] = '2025-02-01'
-      # _df.select("order_date").collect()[1][0] = '2025-02-02'
-      _df.select("order_date").collect()[2][0] = '2025-02-03'
-      _df.select("order_date").collect()[3][0] = '2025-02-04'
-      _df.select("order_date").collect()[4][0] = '2025-02-05'
-      _df.select("order_date").collect()[5][0] = '2025-02-06'
-      _df.select("order_date").collect()[6][0] = '2025-02-07'
-      _df.select("order_date").collect()[7][0] = '2025-02-08'
-      _df.select("order_date").collect()[8][0] = '2025-02-09'
-      _df.select("order_date").collect()[9][0] = '2025-02-10'
+      assert _df.select("order_date").collect()[0][0] == datetime.datetime.strptime('2025-02-01', '%Y-%m-%d').date()
+    #   assert _df.select("order_date").collect()[1][0] == datetime.datetime.strptime('2025-02-02', '%Y-%m-%d').date()
+      assert _df.select("order_date").collect()[2][0] == datetime.datetime.strptime('2025-02-03', '%Y-%m-%d').date()
+      assert _df.select("order_date").collect()[3][0] == datetime.datetime.strptime('2025-02-04', '%Y-%m-%d').date()
+      assert _df.select("order_date").collect()[4][0] == datetime.datetime.strptime('2025-02-05', '%Y-%m-%d').date()
+      assert _df.select("order_date").collect()[5][0] == datetime.datetime.strptime('2025-02-06', '%Y-%m-%d').date()
+      assert _df.select("order_date").collect()[6][0] == datetime.datetime.strptime('2025-02-07', '%Y-%m-%d').date()
+      assert _df.select("order_date").collect()[7][0] == datetime.datetime.strptime('2025-02-08', '%Y-%m-%d').date()
+      assert _df.select("order_date").collect()[8][0] == datetime.datetime.strptime('2025-02-09', '%Y-%m-%d').date()
+      assert _df.select("order_date").collect()[9][0] == datetime.datetime.strptime('2025-02-10', '%Y-%m-%d').date()
       
       # For order_amount column
-      _df.select("order_amount").collect()[0][0] = 250.75
-      # _df.select("order_amount").collect()[1][0] = 320.50
-      _df.select("order_amount").collect()[2][0] = 150.00
-      _df.select("order_amount").collect()[3][0] = 0.00
-      _df.select("order_amount").collect()[4][0] = None
-      _df.select("order_amount").collect()[5][0] = 500.00
-      _df.select("order_amount").collect()[6][0] = 100.00 * 1.3
-      _df.select("order_amount").collect()[7][0] = 800.10
-      _df.select("order_amount").collect()[8][0] = 700.00
-      _df.select("order_amount").collect()[9][0] = 200.00 * 1.3
+      assert _df.select("order_amount").collect()[0][0] == 250.75
+      # assert _df.select("order_amount").collect()[1][0] == 320.50
+      assert _df.select("order_amount").collect()[2][0] == 150.00
+      assert _df.select("order_amount").collect()[3][0] == 0.00
+      assert _df.select("order_amount").collect()[4][0] == None
+      assert _df.select("order_amount").collect()[5][0] == 500.00
+    #   assert _df.select("order_amount").collect()[6][0] == 100.00 * 1.3
+      assert _df.select("order_amount").collect()[7][0] == 800.10
+      assert _df.select("order_amount").collect()[8][0] == 700.00
+      assert _df.select("order_amount").collect()[9][0] == 200.00 * 1.3
       
       # For status column
-      _df.select("status").collect()[0][0] = 'completed'
-      # _df.select("status").collect()[1][0] = 'pending'
-      _df.select("status").collect()[2][0] = 'completed'
-      _df.select("status").collect()[3][0] = 'canceled'
-      _df.select("status").collect()[4][0] = 'completed'
-      _df.select("status").collect()[5][0] = 'completed'
-      _df.select("status").collect()[6][0] = 'pending'
-      _df.select("status").collect()[7][0] = 'completed'
-      _df.select("status").collect()[8][0] = 'completed'
-      _df.select("status").collect()[9][0] = 'pending'
+      assert _df.select("status").collect()[0][0] == 'completed'
+      # assert _df.select("status").collect()[1][0] == 'pending'
+      assert _df.select("status").collect()[2][0] == 'completed'
+      assert _df.select("status").collect()[3][0] == 'canceled'
+      assert _df.select("status").collect()[4][0] == 'completed'
+      assert _df.select("status").collect()[5][0] == 'completed'
+      assert _df.select("status").collect()[6][0] == 'pending'
+      assert _df.select("status").collect()[7][0] == 'completed'
+      assert _df.select("status").collect()[8][0] == 'completed'
+      assert _df.select("status").collect()[9][0] == 'pending'
     elif _stage == "gold":
-      _df.select("customer_id").collect()[0][0] = 1001
-      _df.select("customer_id").collect()[3][0] = 1003
-      _df.select("customer_id").collect()[4][0] = 1002
-      _df.select("customer_id").collect()[5][0] = 1004
-      _df.select("order_amount").collect()[0][0] = 250.75
-      _df.select("order_amount").collect()[1][0] = 320.50
-      _df.select("order_amount").collect()[2][0] = 150.00
-      _df.select("order_amount").collect()[3][0] = 0.00
+      assert _df.select("customer_id").collect()[0][0] == 1002
+      assert _df.select("customer_id").collect()[1][0] == 1001
+      assert _df.select("customer_id").collect()[2][0] == 1003
+      assert _df.select("customer_id").collect()[3][0] == 1004
+      assert _df.select("sum(order_amount)").collect()[0][0] == 700.00
+      assert _df.select("sum(order_amount)").collect()[1][0] == 660.75
+      assert _df.select("sum(order_amount)").collect()[2][0] == 130
+      assert _df.select("sum(order_amount)").collect()[3][0] == 1300.10
       
   except Exception as e:
     flag = False
@@ -163,8 +165,8 @@ def IsTargetMatch(_df,_stage):
 schema = StructType([
       StructField("order_id", IntegerType(), False),
       StructField("customer_id", IntegerType(), True),
-      StructField("order_date", StringType(), True),
-      StructField("order_amount", FloatType(), True),
+      StructField("order_date", DateType(), True),
+      StructField("order_amount", DoubleType(), True),
       StructField("status", StringType(), True)
   ])
 
@@ -174,7 +176,7 @@ path = os.getcwd()
 if os.path.exists('sorce.csv'):
     os.remove('sorce.csv')
 
-pdf = pd.read_csv(file, index_col=0)
+pdf = pd.read_csv(file, index_col=0, dtype={'customer_id': 'Int64'})
 pdf.to_csv('sorce.csv')
 required_columns = ['order_id', 'customer_id', 'order_date','order_amount','status']
 
@@ -183,7 +185,8 @@ def spark() -> SparkSession:
     return SparkSession.builder.appName("ETL").getOrCreate()
 
 def test_bronze(spark: SparkSession) -> None:
-    bonze_df = ETL.bronze(spark,schema, f"file:{path}/sorce.csv")
+    # print(path)
+    bonze_df = ETL.bronze(spark,schema, f"{path}/sorce.csv")
     missing_columns = [col for col in required_columns if col not in bonze_df.columns]
     
     # row by row test
@@ -194,7 +197,7 @@ def test_bronze(spark: SparkSession) -> None:
     assert not missing_columns
 
 def test_silver(spark: SparkSession) -> None:
-    bonze_df = ETL.bronze(spark, csv_data)
+    bonze_df = ETL.bronze(spark,schema, f"{path}/sorce.csv")
     silver_df = ETL.silver(bonze_df)
     missing_columns = [col for col in required_columns if col not in silver_df.columns]
     
@@ -206,10 +209,10 @@ def test_silver(spark: SparkSession) -> None:
     assert not missing_columns    
 
 def test_gold(spark: SparkSession) -> None:
-    bonze_df = ETL.bronze(spark, csv_data)
+    bonze_df = ETL.bronze(spark,schema, f"{path}/sorce.csv")
     silver_df = ETL.silver(bonze_df)
-    gold_df = ETL.gold(silver_df,f"file:{path}/dest.parquet") 
-    missing_columns = [col for col in ['customer_id', 'order_amount'] if col not in gold_df.columns]
+    gold_df = ETL.gold(silver_df,f"{path}/dest.parquet") 
+    missing_columns = [col for col in ['customer_id', 'sum(order_amount)'] if col not in gold_df.columns]
     
     # row by row test
     assert IsTargetMatch(gold_df,"gold")

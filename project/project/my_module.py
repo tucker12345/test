@@ -8,10 +8,9 @@ from pyspark.sql import DataFrame
 from pyspark.sql import SparkSession
 from pyspark.sql.functions import col
 from pyspark.sql.functions import when
-from pyspark.sql.types import StructType
+from pyspark.sql.types import StructType,StringType
 
 spark = SparkSession.builder.appName("MyApp").getOrCreate()
-
 
 class ETL:
     """ETL class provides methods to process data through different stages: bronze, silver, and gold.
@@ -24,7 +23,7 @@ class ETL:
     """
 
     @classmethod
-    def bronze(cls, _spark: SparkSession,_schema:StructType,_data:list) -> DataFrame:
+    def bronze(cls, _spark: SparkSession,_schema:StructType,_path:StringType) -> DataFrame:
         """Create a DataFrame from the provided data and schema, and filters out rows where 'customer_id' is null.
 
         Args:
@@ -36,8 +35,8 @@ class ETL:
             DataFrame: A DataFrame with rows where 'customer_id' is not null.
 
         """
-        src_df = _spark.createDataFrame(_data, _schema)
-        return src_df.filter(src_df["customer_id"].isNotNull())
+        src_df = _spark.read.schema( _schema).option("header", "true").csv(_path)
+        return src_df
 
     @classmethod
     def silver(cls, _df: DataFrame) -> DataFrame:
@@ -53,13 +52,14 @@ class ETL:
             DataFrame: A new DataFrame with the adjusted 'order_amount' column.
 
         """
-        return _df.withColumn(
+        df_filtered = _df.filter(_df["customer_id"].isNotNull())
+        return df_filtered.withColumn(
             "order_amount",
             when(col("status") == "pending", col("order_amount") * 1.3).otherwise(col("order_amount"))
         )
 
     @classmethod
-    def gold(cls, _df: DataFrame) -> DataFrame:
+    def gold(cls, _df: DataFrame,_path:StringType) -> DataFrame:
         """Aggregate the input DataFrame by summing the order amounts for each customer.
 
         Args:
@@ -69,4 +69,7 @@ class ETL:
             DataFrame: DataFrame with the total order amount for each customer, grouped by customer_id.
 
         """
-        return _df.groupBy("customer_id").sum("order_amount")
+        df_gold = _df.groupBy("customer_id").sum("order_amount")
+        
+        df_gold.write.mode("overwrite").parquet(_path)
+        return df_gold
